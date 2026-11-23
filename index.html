@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#070816">
+<meta name="description" content="CURIOSO+ - Juegos, enigmas, curiosidades y desafíos.">
+<title>CURIOSO+ | Neon Universe</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#070816;--panel:rgba(17,24,48,.62);
+ --cyan:#50f5ff;--purple:#c46bff;--pink:#ff59dc;
+ --text:#f2f5ff;--muted:#9caac9;
+}
+body{
+ margin:0;background:
+ radial-gradient(ellipse at 5% 20%,#10365c55,transparent 45%),
+ radial-gradient(ellipse at 90% 10%,#6b147255,transparent 40%),
+ radial-gradient(ellipse at 50% 100%,#112d6555,transparent 50%),var(--bg);
+ color:var(--text);font-family:system-ui,-apple-system,sans-serif;
+ min-height:100vh;overflow-x:hidden
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+ background-image:radial-gradient(#8faaff 1px,transparent 1px);
+ background-size:28px 28px
+}
+header{
+ padding:20px 18px 16px;position:relative;
+ border-bottom:1px solid #65eaff22;
+ background:linear-gradient(90deg,#10142b99,#27134088,#0c223a99);
+ backdrop-filter:blur(18px)
+}
+.headerline{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:25px;font-weight:950;letter-spacing:1px}
+.logo b{
+ background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+ -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.tagline{font-size:11px;letter-spacing:2px;color:#9eb4d6;margin-top:5px}
+.level{
+ border:1px solid #57eeff55;border-radius:50px;padding:7px 11px;
+ color:var(--cyan);font-size:12px;background:#0b233855
+}
+main{max-width:850px;margin:auto;padding:16px 14px 100px}
+nav{
+ position:sticky;top:0;z-index:20;display:flex;overflow-x:auto;
+ gap:8px;padding:11px;background:#080b19d9;backdrop-filter:blur(20px);
+ border-bottom:1px solid #6b65ff22;scrollbar-width:none
+}
+nav::-webkit-scrollbar{display:none}
+nav button{
+ flex:0 0 auto;background:#141b31;color:#aebcdb;
+ border:1px solid #657baf33;border-radius:13px;padding:10px 14px;
+ font-weight:700;font-size:12px
+}
+nav button.active{
+ color:#fff;background:linear-gradient(120deg,#126a84,#6337a2);
+ border-color:#7df4ff;box-shadow:0 0 15px #3fe9ff44
+}
+.page{display:none;animation:fade .3s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.glass{
+ background:linear-gradient(145deg,#14223c99,#15112caa);
+ border:1px solid #87caff33;border-radius:21px;padding:18px;
+ margin-bottom:15px;backdrop-filter:blur(15px);
+ box-shadow:0 8px 30px #0003,inset 0 0 20px #a166ff08;
+ position:relative;overflow:hidden
+}
+.glass:after{
+ content:"";position:absolute;top:0;left:0;width:45%;height:1px;
+ background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.7
+}
+.hero{
+ padding:24px 20px;border:1px solid #b46dff66;border-radius:24px;
+ background:linear-gradient(140deg,#132d51cc,#2c1755bb,#101b36cc);
+ box-shadow:0 0 30px #794dff20,inset 0 0 25px #35dfff08;
+ position:relative;overflow:hidden;margin-bottom:17px
+}
+.hero:before{
+ content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+ background:#8e42ff30;filter:blur(50px);right:-40px;top:-50px
+}
+.hero h1{font-size:27px;line-height:1.15;margin:0 0 10px}
+.gradient{
+ background:linear-gradient(90deg,#56f4ff,#c279ff,#ff70df);
+ -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p{font-size:14px;color:#bdc9e4;line-height:1.6}
+.eyebrow{font-size:10px;color:var(--cyan);letter-spacing:2px;font-weight:800}
+h2{font-size:18px;margin:0 0 12px}
+h3{font-size:15px}
+p{line-height:1.55}
+.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{
+ padding:15px;border-radius:17px;border:1px solid #7a80ff33;
+ background:linear-gradient(135deg,#1c2b4999,#17142e99);
+ cursor:pointer;transition:.2s;min-height:116px
+}
+.tile:active{transform:scale(.97);box-shadow:0 0 18px #65f5ff30}
+.tile .emoji{font-size:25px}
+.tile h3{margin:8px 0 4px}
+.tile p{margin:0;color:#aab8d5;font-size:11px}
+.btn{
+ background:linear-gradient(100deg,#117b94,#6550bd);
+ color:white;border:1px solid #65edff77;border-radius:13px;
+ padding:12px 16px;font-weight:800;font-size:13px;
+ box-shadow:0 0 15px #40dfff20;margin:4px 3px;cursor:pointer
+}
+.btn.alt{background:#191f38;border-color:#a764ff66;color:#d5c8ff}
+.btn.pink{background:linear-gradient(100deg,#9636aa,#6d3dbe);border-color:#ff79ed66}
+.btn.full{width:100%}
+.answer{
+ width:100%;text-align:left;padding:13px 14px;margin:6px 0;
+ background:#101a30;border:1px solid #6d8ab333;color:#e8eeff;
+ border-radius:12px;font-weight:650
+}
+.answer:hover{border-color:var(--cyan);background:#142944}
+.answer.correct{border-color:#36ffc0;background:#103c37}
+.answer.wrong{border-color:#ff6caa;background:#452239}
+.result{
+ border:1px solid #54efff55;border-radius:13px;padding:13px;
+ background:#102c3c99;margin-top:10px;color:#d9faff
+}
+.statrow{display:flex;gap:8px;margin-bottom:12px}
+.stat{
+ flex:1;text-align:center;padding:11px;border:1px solid #8a71ff44;
+ border-radius:14px;background:#151c33
+}
+.stat strong{display:block;font-size:21px;color:var(--cyan)}
+.stat span{font-size:10px;color:#9caac7}
+.progress{height:6px;background:#202c43;border-radius:9px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));width:0;transition:.4s}
+.fact{font-size:17px;line-height:1.7}
+.adslot{
+ border:1px solid #8a70ff33;padding:12px;text-align:center;
+ border-radius:17px;margin:18px 0;background:linear-gradient(135deg,#101a2c99,#21133499);
+ backdrop-filter:blur(12px);box-shadow:0 0 18px #7d4cff12
+}
+.ad-label{font-size:9px;letter-spacing:2px;color:#8191ad;margin-bottom:8px}
+.ad-fallback{font-size:11px;color:#657590;padding:10px}
+.adsbygoogle{display:block;min-height:100px}
+input,textarea{
+ width:100%;background:#0c1427;border:1px solid #6079a655;color:white;
+ padding:13px;border-radius:12px;margin:7px 0;font-size:15px
+}
+.bigresult{text-align:center;font-size:30px;font-weight:900;margin:15px}
+footer{text-align:center;color:#75829c;font-size:11px;padding:20px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}.hero h1{font-size:35px}}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="headerline">
+  <div>
+   <div class="logo">CURIOSO<b>+</b> ✦</div>
+   <div class="tagline">DESCUBRÍ · JUGÁ · SORPRENDETE</div>
+  </div>
+  <div class="level">⚡ LVL <span id="level">1</span></div>
+ </div>
+</header>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">⌂ Inicio</button>
+ <button onclick="showPage('quiz',this)">🧠 Quiz</button>
+ <button onclick="showPage('daily',this)">🔥 Diario</button>
+ <button onclick="showPage('mystery',this)">🕵️ Misterio</button>
+ <button onclick="showPage('facts',this)">🌎 Datos</button>
+ <button onclick="showPage('tools',this)">🛠️ Tools</button>
+</nav>
+
+<main>
+
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="eyebrow">✦ BIENVENIDO A TU UNIVERSO</div>
+  <h1>¿Estás listo para<br><span class="gradient">desafiar tu mente?</span></h1>
+  <p>Juegos, secretos, curiosidades y desafíos. Cada visita tiene algo nuevo.</p>
+  <button class="btn" onclick="showPage('quiz')">ENTRAR A JUGAR ↗</button>
+ </div>
+
+ <div class="glass">
+  <div class="statrow">
+   <div class="stat"><strong id="homePoints">0</strong><span>XP TOTAL</span></div>
+   <div class="stat"><strong id="homeStreak">0</strong><span>RACHA 🔥</span></div>
+   <div class="stat"><strong id="homePlayed">0</strong><span>JUGADAS</span></div>
+  </div>
+  <h2>🚀 Explorá el universo</h2>
+  <div class="grid">
+   <div class="tile" onclick="showPage('quiz')"><div class="emoji">🧠</div><h3>Quiz</h3><p>Preguntas y puntos</p></div>
+   <div class="tile" onclick="showPage('daily')"><div class="emoji">🔥</div><h3>Desafío diario</h3><p>Un reto para vos</p></div>
+   <div class="tile" onclick="showPage('mystery')"><div class="emoji">🕵️</div><h3>Misterio</h3><p>Descubrí la respuesta</p></div>
+   <div class="tile" onclick="showPage('facts')"><div class="emoji">🌌</div><h3>Curiosidades</h3><p>Datos increíbles</p></div>
+   <div class="tile" onclick="showPage('tools')"><div class="emoji">🎲</div><h3>Herramientas</h3><p>Generadores útiles</p></div>
+   <div class="tile" onclick="shareSite()"><div class="emoji">📲</div><h3>Compartir</h3><p>Invitá a tus amigos</p></div>
+  </div>
+ </div>
+
+ <div class="glass">
+  <div class="eyebrow">DATO DEL UNIVERSO</div>
+  <p class="fact" id="homeFact"></p>
+  <button class="btn alt" onclick="newFact()">OTRO DATO ↻</button>
+  <button class="btn" onclick="shareFact()">COMPARTIR ↗</button>
+ </div>
+ <div class="adslot">
+ <div class="ad-label">PUBLICIDAD · CURIOSO+</div>
+ <div class="ad-fallback">Espacio reservado para publicidad</div>
+ <ins class="adsbygoogle" style="display:block"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+</section>
+
+<section id="quiz" class="page">
+ <div class="glass">
+  <div class="eyebrow">NEON QUIZ · MODO CLÁSICO</div>
+  <h2>🧠 Poné a prueba tus conocimientos</h2>
+  <div class="statrow">
+   <div class="stat"><strong id="quizScore">0</strong><span>PUNTOS</span></div>
+   <div class="stat"><strong id="quizNum">1</strong><span>PREGUNTA</span></div>
+  </div>
+  <div class="progress"><div id="quizProgress"></div></div>
+  <h3 id="question"></h3>
+  <div id="answers"></div>
+  <div id="quizResult" class="result" hidden></div>
+  <button class="btn full" onclick="nextQuestion()">SIGUIENTE →</button>
+  <button class="btn alt full" onclick="restartQuiz()">REINICIAR</button>
+ </div>
+ <div class="adslot">
+ <div class="ad-label">PUBLICIDAD · CURIOSO+</div>
+ <div class="ad-fallback">Espacio reservado para publicidad</div>
+ <ins class="adsbygoogle" style="display:block"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+</section>
+
+<section id="daily" class="page">
+ <div class="glass">
+  <div class="eyebrow">⚡ MISIÓN DEL DÍA</div>
+  <h2>🔥 Desafío diario</h2>
+  <p>Tenés una oportunidad para resolver este desafío. ¡Pensá antes de responder!</p>
+  <h3>¿Qué tiene ciudades, pero no casas; bosques, pero no árboles; y ríos, pero no agua?</h3>
+  <button class="btn" onclick="revealDaily()">REVELAR RESPUESTA</button>
+  <div class="result" id="dailyAnswer" hidden>¡Un mapa! 🗺️</div>
+ </div>
+ <div class="glass">
+  <h2>🔢 Secuencia lógica</h2>
+  <p>2 · 6 · 12 · 20 · 30 · ?</p>
+  <p class="muted">Encontrá el próximo número.</p>
+  <input type="number" id="dailyNumber" placeholder="Tu respuesta">
+  <button class="btn full" onclick="checkDailyNumber()">COMPROBAR</button>
+  <div class="result" id="dailyNumberResult" hidden></div>
+ </div>
+</section>
+
+<section id="mystery" class="page">
+ <div class="glass">
+  <div class="eyebrow">ARCHIVO SECRETO Nº 001</div>
+  <h2>🕵️ El misterio de las habitaciones</h2>
+  <p>Un hombre aparece muerto en una habitación cerrada. No hay ventanas abiertas, ni armas, ni señales de lucha. En el suelo hay agua y algunos vidrios.</p>
+  <p class="muted">Pista 1: No fue un asesinato.</p>
+  <button class="btn alt" onclick="hintMystery()">VER OTRA PISTA</button>
+  <div class="result" id="mysteryHint" hidden>Los vidrios pertenecían a algo que estaba vivo. 🫧</div>
+  <button class="btn" onclick="solveMystery()">RESOLVER MISTERIO</button>
+  <div class="result" id="mysteryAnswer" hidden>Era un pez. La pecera se rompió, cayó al suelo y el pez murió. 🐟</div>
+ </div>
+</section>
+
+<section id="facts" class="page">
+ <div class="glass">
+  <div class="eyebrow">BASE DE CONOCIMIENTO</div>
+  <h2>🌎 Curiosidades</h2>
+  <div class="stat"><strong id="factCategory">UNIVERSO</strong><span>CATEGORÍA</span></div>
+  <p class="fact" id="factText"></p>
+  <button class="btn" onclick="newFact()">NUEVA CURIOSIDAD ↻</button>
+  <button class="btn alt" onclick="shareFact()">COMPARTIR ↗</button>
+ </div>
+ <div class="adslot">
+ <div class="ad-label">PUBLICIDAD · CURIOSO+</div>
+ <div class="ad-fallback">Espacio reservado para publicidad</div>
+ <ins class="adsbygoogle" style="display:block"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+</section>
+
+<section id="tools" class="page">
+ <div class="glass">
+  <div class="eyebrow">CAJA DE HERRAMIENTAS</div>
+  <h2>🎲 Número aleatorio</h2>
+  <p class="muted">Elegí un número entre 1 y 100.</p>
+  <button class="btn full" onclick="randomNumber()">GENERAR</button>
+  <div class="bigresult gradient" id="randomResult">—</div>
+ </div>
+ <div class="glass">
+  <h2>🎡 Decisión aleatoria</h2>
+  <p>¿No sabés qué hacer? Dejá que el universo decida.</p>
+  <button class="btn full" onclick="randomDecision()">DECIDIR POR MÍ</button>
+  <div class="bigresult" id="decisionResult"></div>
+ </div>
+ <div class="glass">
+  <h2>🔐 Generador de contraseñas</h2>
+  <p class="muted">Generá una contraseña aleatoria de 16 caracteres.</p>
+  <button class="btn full" onclick="makePassword()">GENERAR</button>
+  <input id="passResult" readonly placeholder="Tu contraseña">
+  <button class="btn alt full" onclick="copyPass()">COPIAR</button>
+ </div>
+ <div class="glass">
+  <h2>🧮 Calculadora</h2>
+  <input id="calcInput" placeholder="Ej: 25*4+10">
+  <button class="btn full" onclick="calculate()">CALCULAR</button>
+  <div class="bigresult" id="calcResult"></div>
+ </div>
+</section>
+
+</main>
+<footer>CURIOSO+ · NEON UNIVERSE ✦<br>Un mundo para descubrir</footer>
+
+<script>
+// ===== CONFIGURACIÓN GOOGLE ADSENSE =====
+const ADS_CONFIG = {
+  publisherId: "", // Ejemplo: ca-pub-XXXXXXXXXXXXXXXX
+  slots: []       // IDs de tus bloques publicitarios
+};
+
+function initializeAds(){
+  const validPublisher = /^ca-pub-\\d+$/.test(ADS_CONFIG.publisherId);
+  const validSlots = ADS_CONFIG.slots.length > 0 &&
+                    ADS_CONFIG.slots.every(id => /^\\d+$/.test(id));
+
+  if(!validPublisher || !validSlots) return;
+
+  document.querySelectorAll(".adsbygoogle").forEach((ad, index)=>{
+    ad.setAttribute("data-ad-client", ADS_CONFIG.publisherId);
+    ad.setAttribute("data-ad-slot", ADS_CONFIG.slots[index % ADS_CONFIG.slots.length]);
+    ad.querySelector?.(".ad-fallback");
+  });
+
+  const script=document.createElement("script");
+  script.async=true;
+  script.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="+ADS_CONFIG.publisherId;
+  script.crossOrigin="anonymous";
+  script.onload=()=>{
+    document.querySelectorAll(".adsbygoogle").forEach(ad=>{
+      try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}
+    });
+    document.querySelectorAll(".ad-fallback").forEach(el=>el.style.display="none");
+  };
+  document.head.appendChild(script);
+}
+// ===== FIN CONFIGURACIÓN ADSENSE =====
+
+const facts=[
+{c:"ANIMALES",t:"Los pulpos tienen tres corazones y sangre azul."},
+{c:"ESPACIO",t:"En Venus, un día dura más que su año."},
+{c:"NATURALEZA",t:"Los tiburones existen desde antes que los árboles."},
+{c:"ANIMALES",t:"Los flamencos nacen grises y adquieren su color por la alimentación."},
+{c:"CIENCIA",t:"La miel bien conservada puede durar muchísimo tiempo sin echarse a perder."},
+{c:"ESPACIO",t:"En Marte, los atardeceres pueden verse azulados."},
+{c:"ANIMALES",t:"Las jirafas tienen siete vértebras cervicales, igual que los humanos."},
+{c:"PLANETA",t:"La Antártida es el desierto más grande del planeta."},
+{c:"CIENCIA",t:"Un rayo puede ser varias veces más caliente que la superficie del Sol."},
+{c:"ANIMALES",t:"Los wombats producen excrementos con forma de cubo."},
+{c:"ESPACIO",t:"En la Luna hay huellas que podrían permanecer durante millones de años."},
+{c:"NATURALEZA",t:"Un bambú puede crecer muy rápido, dependiendo de su especie."}
+];
+let factI=0;
+function newFact(){
+ factI=Math.floor(Math.random()*facts.length);
+ document.getElementById("factText").textContent=facts[factI].t;
+ document.getElementById("factCategory").textContent=facts[factI].c;
+ document.getElementById("homeFact").textContent=facts[factI].t;
+}
+newFact();
+function showPage(id,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+const questions=[
+{q:"¿Cuál es el planeta más grande del sistema solar?",a:["Marte","Júpiter","Venus","Mercurio"],c:1},
+{q:"¿Qué animal es conocido por tener tres corazones?",a:["Delfín","Tiburón","Pulpo","Tortuga"],c:2},
+{q:"¿Cuál es el océano más grande?",a:["Atlántico","Índico","Pacífico","Ártico"],c:2},
+{q:"¿Cuántos lados tiene un hexágono?",a:["5","6","7","8"],c:1},
+{q:"¿Cuál es el metal líquido a temperatura ambiente?",a:["Hierro","Mercurio","Cobre","Plata"],c:1},
+{q:"¿Qué gas absorben principalmente las plantas?",a:["Oxígeno","Nitrógeno","Dióxido de carbono","Helio"],c:2},
+{q:"¿Cuál es el satélite natural de la Tierra?",a:["Europa","Titán","La Luna","Fobos"],c:2},
+{q:"¿Qué mamífero puede volar realmente?",a:["Ardilla","Murciélago","Pingüino","Gallina"],c:1}
+];
+let qIndex=0,qPoints=0,qAnswered=false;
+function loadQ(){
+ let q=questions[qIndex];
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("quizNum").textContent=qIndex+1;
+ document.getElementById("quizProgress").style.width=((qIndex+1)/questions.length*100)+"%";
+ let box=document.getElementById("answers");box.innerHTML="";
+ document.getElementById("quizResult").hidden=true;qAnswered=false;
+ q.a.forEach((v,i)=>{
+  let b=document.createElement("button");b.className="answer";b.textContent=v;
+  b.onclick=()=>answerQ(i,b);box.appendChild(b);
+ });
+}
+function answerQ(i,b){
+ if(qAnswered)return;qAnswered=true;
+ let q=questions[qIndex],r=document.getElementById("quizResult");
+ r.hidden=false;
+ if(i===q.c){qPoints+=10;b.classList.add("correct");r.textContent="¡Correcto! +10 XP ⚡"}
+ else{b.classList.add("wrong");r.textContent="Incorrecto. La respuesta correcta es "+q.a[q.c]}
+ document.getElementById("quizScore").textContent=qPoints;
+ saveStats(10);
+}
+function nextQuestion(){qIndex=(qIndex+1)%questions.length;loadQ()}
+function restartQuiz(){qIndex=0;qPoints=0;document.getElementById("quizScore").textContent=0;loadQ()}
+loadQ();
+function revealDaily(){document.getElementById("dailyAnswer").hidden=false}
+function checkDailyNumber(){
+ let r=document.getElementById("dailyNumberResult");r.hidden=false;
+ if(Number(document.getElementById("dailyNumber").value)===42){
+ r.textContent="¡Correcto! La secuencia suma 4, 6, 8, 10 y 12. +20 XP";
+ saveStats(20)
+ }else r.textContent="Todavía no. Las diferencias aumentan de 2 en 2.";
+}
+function hintMystery(){document.getElementById("mysteryHint").hidden=false}
+function solveMystery(){document.getElementById("mysteryAnswer").hidden=false}
+function randomNumber(){document.getElementById("randomResult").textContent=Math.floor(Math.random()*100)+1}
+function randomDecision(){
+ const choices=["Aprendé algo nuevo 📚","Salí a caminar 🚶","Escuchá música 🎵","Mirá una película 🎬","Hacé algo que venís postergando ⚡","Tomate un descanso 😌","Prepará algo rico 🍕"];
+ document.getElementById("decisionResult").textContent=choices[Math.floor(Math.random()*choices.length)]
+}
+function makePassword(){
+ const c="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+ let s="";for(let i=0;i<16;i++)s+=c[Math.floor(Math.random()*c.length)];
+ document.getElementById("passResult").value=s;
+}
+function copyPass(){
+ let t=document.getElementById("passResult");t.select();
+ if(t.value)navigator.clipboard?.writeText(t.value);
+}
+function calculate(){
+ let s=document.getElementById("calcInput").value;
+ if(!/^[0-9+\-*/(). %]+$/.test(s)){document.getElementById("calcResult").textContent="Expresión inválida";return}
+ try{document.getElementById("calcResult").textContent=Function('"use strict";return ('+s+')')()}catch(e){document.getElementById("calcResult").textContent="Error"}
+}
+let totalXP=Number(localStorage.getItem("curiosoXP")||0);
+let played=Number(localStorage.getItem("curiosoPlayed")||0);
+function saveStats(x){
+ totalXP+=x;played++;
+ localStorage.setItem("curiosoXP",totalXP);
+ localStorage.setItem("curiosoPlayed",played);
+ updateStats();
+}
+function updateStats(){
+ document.getElementById("homePoints").textContent=totalXP;
+ document.getElementById("homePlayed").textContent=played;
+ document.getElementById("level").textContent=Math.floor(totalXP/100)+1;
+}
+updateStats();
+function shareFact(){
+ let text="✨ CURIOSO+ | "+facts[factI].t+" Descubrí algo nuevo.";
+ share(text)
+}
+function shareSite(){share("🧠 Descubrí CURIOSO+, jugá desafíos y conocé datos increíbles.")}
+function share(text){
+ if(navigator.share)navigator.share({title:"CURIOSO+",text:text,url:location.href}).catch(()=>{});
+ else if(navigator.clipboard)navigator.clipboard.writeText(text);
+}
+initializeAds();
+</script>
+</body>
+</html>

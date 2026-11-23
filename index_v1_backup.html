@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Curiosidades, juegos mentales, desafíos y herramientas gratuitas.">
+<title>CURIOSO+ | Descubrí algo nuevo</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:system-ui,Arial,sans-serif;
+ background:#0b1020;
+ color:#f5f7ff;
+}
+header{
+ padding:20px;
+ background:linear-gradient(120deg,#171e38,#35145c,#112c54);
+}
+.logo{font-size:27px;font-weight:900}
+.logo span{color:#9e76ff}
+.subtitle{color:#c6cbe0;font-size:13px}
+nav{
+ display:flex;gap:8px;overflow:auto;padding:12px;
+ background:#10172b;position:sticky;top:0;z-index:5
+}
+nav button{
+ background:#202b43;color:#fff;border:0;border-radius:20px;
+ padding:10px 15px;white-space:nowrap;font-weight:bold
+}
+nav button.active{background:#8b5cf6}
+main{padding:15px;max-width:850px;margin:auto}
+section{display:none}
+section.active{display:block}
+.card{
+ background:linear-gradient(145deg,#18233b,#141b2e);
+ border:1px solid #293651;border-radius:18px;
+ padding:18px;margin-bottom:15px
+}
+.hero{
+ background:linear-gradient(135deg,#6738c9,#147caa);
+ padding:23px;border-radius:20px;margin-bottom:16px
+}
+.hero h1{font-size:26px;margin:0 0 8px}
+h2{margin-top:5px}
+.small{color:#b7c3dc;font-size:13px}
+button.action{
+ border:0;border-radius:12px;background:#8b5cf6;color:white;
+ padding:12px 16px;font-size:15px;font-weight:bold;margin:5px 3px;
+}
+button.secondary{background:#263653}
+.answer{
+ display:block;width:100%;text-align:left;padding:14px;margin:8px 0;
+ border-radius:12px;background:#202d48;color:white;border:1px solid #354563
+}
+.answer:active{background:#6240b2}
+.result{padding:12px;margin-top:10px;border-radius:12px;background:#25344f}
+.ad-slot{
+ border:1px dashed #4c5975;border-radius:12px;padding:18px;
+ text-align:center;color:#8290ab;margin:18px 0;font-size:12px
+}
+.fact{font-size:18px;line-height:1.6}
+input{
+ width:100%;padding:14px;border-radius:12px;border:1px solid #394965;
+ background:#111a2c;color:white;margin:8px 0
+}
+footer{text-align:center;padding:25px;color:#8895ad;font-size:12px}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="logo">CURIOSO<span>+</span> ✨</div>
+ <div class="subtitle">Descubrí. Jugá. Sorprendete.</div>
+</header>
+
+<nav id="menu">
+ <button class="active" onclick="go('inicio',this)">🏠 Inicio</button>
+ <button onclick="go('juegos',this)">🧠 Juegos</button>
+ <button onclick="go('datos',this)">🌎 Curiosidades</button>
+ <button onclick="go('reto',this)">🔥 Desafío</button>
+ <button onclick="go('utilidades',this)">🛠️ Utilidades</button>
+</nav>
+
+<main>
+
+<section id="inicio" class="active">
+ <div class="hero">
+  <h1>¿Cuánto sabés realmente?</h1>
+  <p>Desafiá tu mente, descubrí cosas increíbles y sorprendé a tus amigos.</p>
+  <button class="action" onclick="go('juegos',menu.children[1])">🎮 Jugar ahora</button>
+ </div>
+
+ <div class="card">
+  <h2>🧠 Desafío rápido</h2>
+  <p>Cuanto más lo sacás, más grande se vuelve. ¿Qué es?</p>
+  <button class="action" onclick="reveal('quick')">Ver respuesta</button>
+  <div id="quick" class="result" hidden>¡Un agujero! 🕳️</div>
+ </div>
+
+ <div class="card">
+  <h2>🌎 Dato que sorprende</h2>
+  <p class="fact" id="homeFact"></p>
+  <button class="action" onclick="newFact()">Otro dato</button>
+  <button class="action secondary" onclick="shareFact()">Compartir</button>
+ </div>
+
+ <div class="ad-slot">Espacio publicitario</div>
+</section>
+
+<section id="juegos">
+ <div class="card">
+  <h2>🎯 Trivia de conocimientos</h2>
+  <p id="question"></p>
+  <div id="answers"></div>
+  <div id="gameResult" class="result" hidden></div>
+  <button class="action" onclick="nextQuestion()">Siguiente pregunta</button>
+  <p class="small">Puntos: <b id="score">0</b></p>
+ </div>
+ <div class="ad-slot">Espacio publicitario</div>
+</section>
+
+<section id="datos">
+ <div class="card">
+  <h2>🌎 Curiosidades increíbles</h2>
+  <p class="fact" id="factText"></p>
+  <button class="action" onclick="newFact()">Descubrir otra</button>
+  <button class="action secondary" onclick="shareFact()">Compartir</button>
+ </div>
+ <div class="ad-slot">Espacio publicitario</div>
+</section>
+
+<section id="reto">
+ <div class="card">
+  <h2>🔥 Desafío mental</h2>
+  <p>Un hombre mira una foto y dice: «No tengo hermanos ni hermanas, pero el padre de este hombre es hijo de mi padre». ¿Quién aparece en la foto?</p>
+  <button class="action" onclick="reveal('challengeAnswer')">Revelar solución</button>
+  <div id="challengeAnswer" class="result" hidden>Su hijo. 👨‍👦</div>
+ </div>
+
+ <div class="card">
+  <h2>🔢 El número misterioso</h2>
+  <p>¿Qué número sigue?</p>
+  <h2>3 — 6 — 12 — 24 — ?</h2>
+  <input id="numberAnswer" type="number" placeholder="Escribí tu respuesta">
+  <button class="action" onclick="checkNumber()">Comprobar</button>
+  <div id="numberResult" class="result" hidden></div>
+ </div>
+</section>
+
+<section id="utilidades">
+ <div class="card">
+  <h2>🎲 Número aleatorio</h2>
+  <p>Elegí un número al azar entre 1 y 100.</p>
+  <button class="action" onclick="randomNumber()">Generar</button>
+  <h1 id="randomResult">?</h1>
+ </div>
+
+ <div class="card">
+  <h2>🎡 Elegir por vos</h2>
+  <p>¿No sabés qué hacer? Dejá que la página decida.</p>
+  <button class="action" onclick="decision()">Decidir</button>
+  <h2 id="decisionResult"></h2>
+ </div>
+
+ <div class="card">
+  <h2>🔐 Generador de contraseñas</h2>
+  <p>Generá una contraseña aleatoria para usar donde quieras.</p>
+  <button class="action" onclick="password()">Generar contraseña</button>
+  <input id="passwordResult" readonly placeholder="Tu contraseña aparecerá aquí">
+  <button class="action secondary" onclick="copyPassword()">Copiar</button>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ CURIOSO+ · Un mundo de curiosidades<br>
+ Entretenimiento gratuito
+</footer>
+
+<script>
+const facts=[
+ "Los pulpos tienen tres corazones y sangre azul.",
+ "Un día en Venus es más largo que su año.",
+ "Los tiburones existen desde antes que los árboles.",
+ "La miel puede conservarse durante miles de años.",
+ "Los flamencos nacen grises, no rosados.",
+ "En la Luna, tu peso sería mucho menor que en la Tierra.",
+ "Las huellas dactilares de los koalas se parecen mucho a las humanas.",
+ "Hay más estrellas en el universo que granos de arena en muchas playas.",
+ "Las jirafas tienen la misma cantidad de vértebras cervicales que los humanos.",
+ "Una nube puede pesar cientos de toneladas."
+];
+
+let factIndex=0;
+function newFact(){
+ factIndex=Math.floor(Math.random()*facts.length);
+ document.getElementById("factText").textContent=facts[factIndex];
+ document.getElementById("homeFact").textContent=facts[factIndex];
+}
+newFact();
+
+function go(id,btn){
+ document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ window.scrollTo(0,0);
+}
+function reveal(id){document.getElementById(id).hidden=false}
+
+const questions=[
+ {q:"¿Cuál es el planeta más grande del sistema solar?",a:["Marte","Júpiter","Venus","Saturno"],c:1},
+ {q:"¿Cuántos lados tiene un hexágono?",a:["5","7","6","8"],c:2},
+ {q:"¿Cuál es el océano más grande?",a:["Atlántico","Índico","Ártico","Pacífico"],c:3},
+ {q:"¿Qué animal es un mamífero y puede volar?",a:["Pingüino","Murciélago","Gallina","Águila"],c:1},
+ {q:"¿Cuántos minutos tiene una hora?",a:["50","100","60","30"],c:2},
+ {q:"¿Cuál es el satélite natural de la Tierra?",a:["Europa","Luna","Titán","Fobos"],c:1}
+];
+let qi=0,score=0,answered=false;
+function loadQuestion(){
+ let q=questions[qi];
+ document.getElementById("question").textContent=q.q;
+ let box=document.getElementById("answers");
+ box.innerHTML="";
+ document.getElementById("gameResult").hidden=true;
+ answered=false;
+ q.a.forEach((a,i)=>{
+  let b=document.createElement("button");
+  b.className="answer";
+  b.textContent=a;
+  b.onclick=()=>answer(i);
+  box.appendChild(b);
+ });
+}
+function answer(i){
+ if(answered)return;
+ answered=true;
+ let q=questions[qi];
+ let r=document.getElementById("gameResult");
+ r.hidden=false;
+ if(i===q.c){score++;r.textContent="¡Correcto! 🎉";} 
+ else r.textContent="Incorrecto. La respuesta era: "+q.a[q.c];
+ document.getElementById("score").textContent=score;
+}
+function nextQuestion(){qi=(qi+1)%questions.length;loadQuestion()}
+loadQuestion();
+
+function checkNumber(){
+ let val=document.getElementById("numberAnswer").value;
+ let r=document.getElementById("numberResult");
+ r.hidden=false;
+ r.textContent=Number(val)===48?"¡Correcto! Se duplica cada vez. 🎉":"No es correcto. Pista: cada número se multiplica por 2.";
+}
+function randomNumber(){document.getElementById("randomResult").textContent=Math.floor(Math.random()*100)+1}
+function decision(){
+ let opts=["Mirar una película 🎬","Salir a caminar 🚶","Aprender algo nuevo 🧠","Escuchar música 🎵","Tomar algo rico ☕","Descansar 😌"];
+ document.getElementById("decisionResult").textContent=opts[Math.floor(Math.random()*opts.length)];
+}
+function password(){
+ let chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$";
+ let out="";
+ for(let i=0;i<16;i++)out+=chars[Math.floor(Math.random()*chars.length)];
+ document.getElementById("passwordResult").value=out;
+}
+function copyPassword(){
+ let v=document.getElementById("passwordResult").value;
+ if(v)navigator.clipboard?.writeText(v);
+}
+function shareFact(){
+ let text="✨ CURIOSO+ | "+facts[factIndex]+" ¡Descubrí más curiosidades!";
+ if(navigator.share)navigator.share({title:"CURIOSO+",text:text});
+ else if(navigator.clipboard){navigator.clipboard.writeText(text);alert("Texto copiado para compartir")}
+}
+</script>
+</body>
+</html>
